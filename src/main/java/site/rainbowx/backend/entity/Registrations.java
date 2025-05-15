@@ -3,25 +3,55 @@ package site.rainbowx.backend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "registrations")
-@IdClass(RegistrationId.class)
+@IdClass(Registrations.RegistrationId.class)
 public class Registrations {
 
+    @Getter
+    @Setter
+    public static class RegistrationId implements Serializable {
+        private Long userId;  // ✅ 正确类型
+        private Long activityId;
+
+        public RegistrationId() {}  // JPA要求无参构造器
+
+        public RegistrationId(Long userId, Long activityId) {
+            this.userId = userId;
+            this.activityId = activityId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RegistrationId that = (RegistrationId) o;
+            return Objects.equals(userId, that.userId) &&
+                    Objects.equals(activityId, that.activityId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(userId, activityId);
+        }
+    }
+
+    // 主键字段必须与复合主键类字段匹配
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Id
-    @Column(name = "activity_id", length = 20)
-    private String activityId;
+    @Column(name = "activity_id")
+    private Long activityId;  // ✅ 正确类型
 
     @Column(name = "apply_time", nullable = false)
     private LocalDateTime applyTime;
@@ -41,11 +71,13 @@ public class Registrations {
     private Integer serviceTime;
 
     @ElementCollection
-    @CollectionTable(name = "proof_files",
+    @CollectionTable(
+            name = "proof_files",
             joinColumns = {
-                    @JoinColumn(name = "user_id"),
-                    @JoinColumn(name = "activity_id")
-            })
+                    @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+                    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
+            }
+    )
     @Column(name = "file_name")
     private List<String> proofFiles;
 
@@ -59,12 +91,11 @@ public class Registrations {
     public enum SignStatus {
         是, 否, 待确认
     }
-}
 
-// 复合主键类
-@Getter
-@Setter
-class RegistrationId implements Serializable {
-    private String userId;
-    private String activityId;
+    @PrePersist
+    protected void prePersist() {
+        if (applyTime == null) {
+            applyTime = LocalDateTime.now();
+        }
+    }
 }

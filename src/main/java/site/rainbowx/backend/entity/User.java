@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // 使用 UUID 生成策略
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "is_deleted")    // 是否已经被软删除
     private Boolean isDeleted;
@@ -41,27 +41,41 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-
+    @ManyToMany
+    @JoinTable(
+            name = "activity_participation",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "volunteer_id")
+    )
+    private List<User> participats;
     @Column(name = "status", length = 20)
     private String status;
     @Column(name = "username", length = 20)
     private String username;
     @Column(name = "userid", length = 20)
-    private String userid;
+    private Long userid;
     @Column(name = "role", length = 20)
     private String role;
     @Column(name = "avatar", length = 20)
     private String avatar;
     @Column(name = "phone", length = 20)
-    private String phone;
+    private Long phone;
     @Column(name = "department", length = 20)
     private String department;
     @Column(name = "studentId", length = 20)
     private String studentId;
     @Column(name = "creditScore", length = 20)
-    private String creditScore;
+    private Long creditScore;
     @Column(name = "firstLogin", length = 20)
     private String firstLogin;
+    @Column(name = "gender", length = 20)
+    private String gender;
+    @Column(name = "class", length = 20)
+    private String class_name;
+    @Column(name = "grade", length = 20)
+    private String grade;
+    @Column(name = "serviceHours", length = 20)
+    private String serviceHours;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -116,5 +130,8 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return ! isDeleted;
+    }
+
+    public void setDeleted(boolean b) {
     }
 }

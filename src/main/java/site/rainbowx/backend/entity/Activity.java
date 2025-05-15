@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.ErrorResponse;
 
 
 import java.time.LocalDateTime;
@@ -16,15 +17,13 @@ import java.util.stream.Collectors;
 @Table(name = "activity")
 public class Activity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "activity_id", length = 20)
-    private String id; // 示例：act1
+    private Long id; // 示例：act1
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", nullable = false)
-    private Volunteer manager;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -45,6 +44,10 @@ public class Activity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Registrations> registrations = new ArrayList<>();
 
+    public static ErrorResponse.Builder builder() {
+        return null;
+    }
+
     // 获取活动的所有参与者
     public List<User> getParticipants() {
         return registrations.stream()
@@ -57,7 +60,7 @@ public class Activity {
             joinColumns = @JoinColumn(name = "activity_id"),
             inverseJoinColumns = @JoinColumn(name = "volunteer_id")
     )
-    private List<Volunteer> participants = new ArrayList<>();
+    private List<User> participats;
 
     @Column(name = "min_participants")
     private Integer minParticipants;

@@ -13,7 +13,8 @@ import java.util.List;
 public class Chat {
     @Id
     @Column(name = "id", length = 20)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "type", nullable = false, length = 10)
     private String type; // "group" 或 "private"
