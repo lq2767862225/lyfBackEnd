@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import site.rainbowx.backend.dto.*;
 import site.rainbowx.backend.entity.User;
 import site.rainbowx.backend.exception.DuplicateEmailException;
 import site.rainbowx.backend.exception.UserNotFoundException;
@@ -84,7 +83,7 @@ public class UserController {
             @Valid @RequestBody UserUpdateRequest request,
             @AuthenticationPrincipal User currentUser) {
 
-        if (!userId.equals(currentUser.getId())) {
+        if (!userId.equals(currentUser.getUserId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.error(403, "无权修改其他用户信息"));
         }
@@ -118,7 +117,7 @@ public class UserController {
             @Valid @RequestBody PasswordResetRequest request,
             @AuthenticationPrincipal User currentUser) {
 
-        if (!userId.equals(currentUser.getId())) {
+        if (!userId.equals(currentUser.getUserId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.error(403, "无权修改其他用户密码"));
         }
@@ -141,7 +140,7 @@ public class UserController {
             @PathVariable Long userId,
             @AuthenticationPrincipal User currentUser) {
 
-        if (!userId.equals(currentUser.getId())) {
+        if (!userId.equals(currentUser.getUserId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.error(403, "无权删除其他用户"));
         }
@@ -160,7 +159,7 @@ public class UserController {
      */
     private UserResponse convertToResponse(User user) {
         return UserResponse.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .phone(user.getPhone())

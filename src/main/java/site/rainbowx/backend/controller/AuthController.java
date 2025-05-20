@@ -50,20 +50,20 @@ public class AuthController {
                 .setExpiresIn(jwtService.getExpirationTime());
     }
 
-    @GetMapping("/me")
-    public UserInfoDto getCurrentUser(@RequestHeader(value = "Authorization", defaultValue = "") String jwt_token) {
-        try {
-            String username = jwtService.extractUsername(jwt_token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            boolean is_valid = jwtService.isTokenValid(jwt_token, userDetails);
-            User user = userService.getUserInfo(username);
-            if (is_valid) {
-                return UserInfoDto.fromUser(user);
-            }
-        }
-        catch (Exception e) {
-            throw new AuthorizationException("Authorization is not valid", e);
-        }
-        throw new AuthorizationException("Authorization is not valid");
-    }
+//    @GetMapping("/me")
+//    public UserInfoDto getCurrentUser(@RequestHeader(value = "Authorization", defaultValue = "") String jwt_token) {
+//        try {
+//            String username = jwtService.extractUsername(jwt_token);
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//            boolean is_valid = jwtService.isTokenValid(jwt_token, userDetails);
+//            User user = userService.getUserInfo(username);
+//            if (is_valid) {
+//                return UserInfoDto.fromUser(user);
+//            }
+//        }
+//        catch (Exception e) {
+//            throw new AuthorizationException("Authorization is not valid", e);
+//        }
+//        throw new AuthorizationException("Authorization is not valid");
+//    }
 }

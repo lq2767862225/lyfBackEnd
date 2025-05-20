@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(name = "is_deleted")    // 是否已经被软删除
     private Boolean isDeleted;

@@ -10,17 +10,14 @@ import site.rainbowx.backend.entity.Activity;
 
 import java.util.List;
 import site.rainbowx.backend.exception.NotFoundException;
+import site.rainbowx.backend.repository.ActivityRepository;
 
 @Service
 @Transactional
 public class ActivityService {
 
-    private final ActivityRepository activityRepository;
-
     @Autowired
-    public ActivityService(ActivityRepository activityRepository) {
-        this.activityRepository = activityRepository;
-    }
+    private ActivityRepository activityRepository;
 
     /**
      * 创建活动
@@ -54,17 +51,12 @@ public class ActivityService {
      * 根据ID获取活动详情
      */
     @Transactional(readOnly = true)
-    public Page<Activity> searchActivitiesByName(String name, Pageable pageable) {
+    public List<Activity> searchActivitiesByName(String name, Pageable pageable) {
         return activityRepository.findByTitleContainingIgnoreCase(name);
     }
 
     public List<Activity> findByType(Activity.ActivityType activityType) {
         return null;
-    }
-
-    public interface ActivityRepository extends JpaRepository<Activity, Long> {
-        // 添加分页查询方法
-        Page<Activity> findByTitleContainingIgnoreCase(String title);
     }
     /**
      * 获取所有活动列表

@@ -43,10 +43,15 @@ public class Registrations {
         }
     }
 
-    // 主键字段必须与复合主键类字段匹配
+    // 主键字段：userId（与复合主键类中的userId匹配）
     @Id
+    @Column(name = "id")
+    private Long userId;
+
+    // 主键字段必须与复合主键类字段匹配
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId("userId")
     private User user;
 
     @Id

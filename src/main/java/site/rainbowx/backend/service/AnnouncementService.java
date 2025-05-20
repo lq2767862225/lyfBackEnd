@@ -84,6 +84,6 @@ public class AnnouncementService {
      */
     @Transactional(readOnly = true)
     public List<Announcement> getImportantAnnouncements() {
-        return announcementRepository.findByIsImportantTrue();
+        return announcementRepository.findByImportantTrue();
     }
 }

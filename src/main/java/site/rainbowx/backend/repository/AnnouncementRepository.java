@@ -9,5 +9,5 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
     List<Announcement> findByTitleContaining(String title);
 
     // 查询重要公告
-    List<Announcement> findByIsImportantTrue();
+    List<Announcement> findByImportantTrue();
 }

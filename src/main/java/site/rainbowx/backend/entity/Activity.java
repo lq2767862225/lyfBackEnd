@@ -41,7 +41,7 @@ public class Activity {
 
     @Embedded
     private Material materials;
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activityId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Registrations> registrations = new ArrayList<>();
 
     public static ErrorResponse.Builder builder() {
